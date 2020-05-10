@@ -9,10 +9,6 @@
  */
 namespace PHPUnit\Framework;
 
-use ArrayAccess;
-use Countable;
-use DOMDocument;
-use DOMElement;
 use PHPUnit\Framework\Constraint\ArrayHasKey;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\Constraint\ClassHasAttribute;
@@ -58,7 +54,6 @@ use PHPUnit\Framework\Constraint\TraversableContainsIdentical;
 use PHPUnit\Framework\Constraint\TraversableContainsOnly;
 use PHPUnit\Util\Type;
 use PHPUnit\Util\Xml;
-use Traversable;
 
 /**
  * A set of assertion methods.
@@ -73,8 +68,8 @@ abstract class Assert
     /**
      * Asserts that an array has a specified key.
      *
-     * @param int|string        $key
-     * @param array|ArrayAccess $array
+     * @param int|string         $key
+     * @param array|\ArrayAccess $array
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -89,7 +84,7 @@ abstract class Assert
             );
         }
 
-        if (!(\is_array($array) || $array instanceof ArrayAccess)) {
+        if (!(\is_array($array) || $array instanceof \ArrayAccess)) {
             throw InvalidArgumentException::create(
                 2,
                 'array or ArrayAccess'
@@ -104,8 +99,8 @@ abstract class Assert
     /**
      * Asserts that an array does not have a specified key.
      *
-     * @param int|string        $key
-     * @param array|ArrayAccess $array
+     * @param int|string         $key
+     * @param array|\ArrayAccess $array
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -120,7 +115,7 @@ abstract class Assert
             );
         }
 
-        if (!(\is_array($array) || $array instanceof ArrayAccess)) {
+        if (!(\is_array($array) || $array instanceof \ArrayAccess)) {
             throw InvalidArgumentException::create(
                 2,
                 'array or ArrayAccess'
@@ -245,7 +240,7 @@ abstract class Assert
     /**
      * Asserts the number of elements of an array, Countable or Traversable.
      *
-     * @param Countable|iterable $haystack
+     * @param \Countable|iterable $haystack
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -253,7 +248,7 @@ abstract class Assert
      */
     public static function assertCount(int $expectedCount, $haystack, string $message = ''): void
     {
-        if (!$haystack instanceof Countable && !\is_iterable($haystack)) {
+        if (!$haystack instanceof \Countable && !\is_iterable($haystack)) {
             throw InvalidArgumentException::create(2, 'countable or iterable');
         }
 
@@ -267,7 +262,7 @@ abstract class Assert
     /**
      * Asserts the number of elements of an array, Countable or Traversable.
      *
-     * @param Countable|iterable $haystack
+     * @param \Countable|iterable $haystack
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -275,7 +270,7 @@ abstract class Assert
      */
     public static function assertNotCount(int $expectedCount, $haystack, string $message = ''): void
     {
-        if (!$haystack instanceof Countable && !\is_iterable($haystack)) {
+        if (!$haystack instanceof \Countable && !\is_iterable($haystack)) {
             throw InvalidArgumentException::create(2, 'countable or iterable');
         }
 
@@ -707,8 +702,25 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertIsNotReadable(string $filename, string $message = ''): void
+    {
+        static::assertThat($filename, new LogicalNot(new IsReadable), $message);
+    }
+
+    /**
+     * Asserts that a file/dir exists and is not readable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4062
+     */
     public static function assertNotIsReadable(string $filename, string $message = ''): void
     {
+        self::createWarning('assertNotIsReadable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertIsNotReadable() instead.');
+
         static::assertThat($filename, new LogicalNot(new IsReadable), $message);
     }
 
@@ -729,8 +741,25 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertIsNotWritable(string $filename, string $message = ''): void
+    {
+        static::assertThat($filename, new LogicalNot(new IsWritable), $message);
+    }
+
+    /**
+     * Asserts that a file/dir exists and is not writable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4065
+     */
     public static function assertNotIsWritable(string $filename, string $message = ''): void
     {
+        self::createWarning('assertNotIsWritable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertIsNotWritable() instead.');
+
         static::assertThat($filename, new LogicalNot(new IsWritable), $message);
     }
 
@@ -751,8 +780,25 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertDirectoryDoesNotExist(string $directory, string $message = ''): void
+    {
+        static::assertThat($directory, new LogicalNot(new DirectoryExists), $message);
+    }
+
+    /**
+     * Asserts that a directory does not exist.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4068
+     */
     public static function assertDirectoryNotExists(string $directory, string $message = ''): void
     {
+        self::createWarning('assertDirectoryNotExists() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertDirectoryDoesNotExist() instead.');
+
         static::assertThat($directory, new LogicalNot(new DirectoryExists), $message);
     }
 
@@ -774,10 +820,28 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public static function assertDirectoryNotIsReadable(string $directory, string $message = ''): void
+    public static function assertDirectoryIsNotReadable(string $directory, string $message = ''): void
     {
         self::assertDirectoryExists($directory, $message);
-        self::assertNotIsReadable($directory, $message);
+        self::assertIsNotReadable($directory, $message);
+    }
+
+    /**
+     * Asserts that a directory exists and is not readable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4071
+     */
+    public static function assertDirectoryNotIsReadable(string $directory, string $message = ''): void
+    {
+        self::createWarning('assertDirectoryNotIsReadable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertDirectoryIsNotReadable() instead.');
+
+        self::assertDirectoryExists($directory, $message);
+        self::assertIsNotReadable($directory, $message);
     }
 
     /**
@@ -798,10 +862,28 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public static function assertDirectoryNotIsWritable(string $directory, string $message = ''): void
+    public static function assertDirectoryIsNotWritable(string $directory, string $message = ''): void
     {
         self::assertDirectoryExists($directory, $message);
-        self::assertNotIsWritable($directory, $message);
+        self::assertIsNotWritable($directory, $message);
+    }
+
+    /**
+     * Asserts that a directory exists and is not writable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4074
+     */
+    public static function assertDirectoryNotIsWritable(string $directory, string $message = ''): void
+    {
+        self::createWarning('assertDirectoryNotIsWritable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertDirectoryIsNotWritable() instead.');
+
+        self::assertDirectoryExists($directory, $message);
+        self::assertIsNotWritable($directory, $message);
     }
 
     /**
@@ -821,8 +903,25 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertFileDoesNotExist(string $filename, string $message = ''): void
+    {
+        static::assertThat($filename, new LogicalNot(new FileExists), $message);
+    }
+
+    /**
+     * Asserts that a file does not exist.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4077
+     */
     public static function assertFileNotExists(string $filename, string $message = ''): void
     {
+        self::createWarning('assertFileNotExists() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertFileDoesNotExist() instead.');
+
         static::assertThat($filename, new LogicalNot(new FileExists), $message);
     }
 
@@ -844,10 +943,28 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public static function assertFileNotIsReadable(string $file, string $message = ''): void
+    public static function assertFileIsNotReadable(string $file, string $message = ''): void
     {
         self::assertFileExists($file, $message);
-        self::assertNotIsReadable($file, $message);
+        self::assertIsNotReadable($file, $message);
+    }
+
+    /**
+     * Asserts that a file exists and is not readable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4080
+     */
+    public static function assertFileNotIsReadable(string $file, string $message = ''): void
+    {
+        self::createWarning('assertFileNotIsReadable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertFileIsNotReadable() instead.');
+
+        self::assertFileExists($file, $message);
+        self::assertIsNotReadable($file, $message);
     }
 
     /**
@@ -868,10 +985,28 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public static function assertFileNotIsWritable(string $file, string $message = ''): void
+    public static function assertFileIsNotWritable(string $file, string $message = ''): void
     {
         self::assertFileExists($file, $message);
-        self::assertNotIsWritable($file, $message);
+        self::assertIsNotWritable($file, $message);
+    }
+
+    /**
+     * Asserts that a file exists and is not writable.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4083
+     */
+    public static function assertFileNotIsWritable(string $file, string $message = ''): void
+    {
+        self::createWarning('assertFileNotIsWritable() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertFileIsNotWritable() instead.');
+
+        self::assertFileExists($file, $message);
+        self::assertIsNotWritable($file, $message);
     }
 
     /**
@@ -1609,8 +1744,25 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        static::assertThat($string, new RegularExpression($pattern), $message);
+    }
+
+    /**
+     * Asserts that a string matches a given regular expression.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4086
+     */
     public static function assertRegExp(string $pattern, string $string, string $message = ''): void
     {
+        self::createWarning('assertRegExp() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertMatchesRegularExpression() instead.');
+
         static::assertThat($string, new RegularExpression($pattern), $message);
     }
 
@@ -1620,8 +1772,31 @@ abstract class Assert
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
+    public static function assertDoesNotMatchRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        static::assertThat(
+            $string,
+            new LogicalNot(
+                new RegularExpression($pattern)
+            ),
+            $message
+        );
+    }
+
+    /**
+     * Asserts that a string does not match a given regular expression.
+     *
+     * @throws ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4089
+     */
     public static function assertNotRegExp(string $pattern, string $string, string $message = ''): void
     {
+        self::createWarning('assertNotRegExp() is deprecated and will be removed in PHPUnit 10. Refactor your code to use assertDoesNotMatchRegularExpression() instead.');
+
         static::assertThat(
             $string,
             new LogicalNot(
@@ -1635,8 +1810,8 @@ abstract class Assert
      * Assert that the size of two arrays (or `Countable` or `Traversable` objects)
      * is the same.
      *
-     * @param Countable|iterable $expected
-     * @param Countable|iterable $actual
+     * @param \Countable|iterable $expected
+     * @param \Countable|iterable $actual
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1644,11 +1819,11 @@ abstract class Assert
      */
     public static function assertSameSize($expected, $actual, string $message = ''): void
     {
-        if (!$expected instanceof Countable && !\is_iterable($expected)) {
+        if (!$expected instanceof \Countable && !\is_iterable($expected)) {
             throw InvalidArgumentException::create(1, 'countable or iterable');
         }
 
-        if (!$actual instanceof Countable && !\is_iterable($actual)) {
+        if (!$actual instanceof \Countable && !\is_iterable($actual)) {
             throw InvalidArgumentException::create(2, 'countable or iterable');
         }
 
@@ -1663,8 +1838,8 @@ abstract class Assert
      * Assert that the size of two arrays (or `Countable` or `Traversable` objects)
      * is not the same.
      *
-     * @param Countable|iterable $expected
-     * @param Countable|iterable $actual
+     * @param \Countable|iterable $expected
+     * @param \Countable|iterable $actual
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1672,11 +1847,11 @@ abstract class Assert
      */
     public static function assertNotSameSize($expected, $actual, string $message = ''): void
     {
-        if (!$expected instanceof Countable && !\is_iterable($expected)) {
+        if (!$expected instanceof \Countable && !\is_iterable($expected)) {
             throw InvalidArgumentException::create(1, 'countable or iterable');
         }
 
-        if (!$actual instanceof Countable && !\is_iterable($actual)) {
+        if (!$actual instanceof \Countable && !\is_iterable($actual)) {
             throw InvalidArgumentException::create(2, 'countable or iterable');
         }
 
@@ -1893,7 +2068,7 @@ abstract class Assert
     /**
      * Asserts that two XML documents are equal.
      *
-     * @param DOMDocument|string $actualXml
+     * @param \DOMDocument|string $actualXml
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1910,7 +2085,7 @@ abstract class Assert
     /**
      * Asserts that two XML documents are not equal.
      *
-     * @param DOMDocument|string $actualXml
+     * @param \DOMDocument|string $actualXml
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1927,8 +2102,8 @@ abstract class Assert
     /**
      * Asserts that two XML documents are equal.
      *
-     * @param DOMDocument|string $expectedXml
-     * @param DOMDocument|string $actualXml
+     * @param \DOMDocument|string $expectedXml
+     * @param \DOMDocument|string $actualXml
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1945,8 +2120,8 @@ abstract class Assert
     /**
      * Asserts that two XML documents are not equal.
      *
-     * @param DOMDocument|string $expectedXml
-     * @param DOMDocument|string $actualXml
+     * @param \DOMDocument|string $expectedXml
+     * @param \DOMDocument|string $actualXml
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1966,9 +2141,15 @@ abstract class Assert
      * @throws AssertionFailedError
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @codeCoverageIgnore
+     *
+     * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4091
      */
-    public static function assertEqualXMLStructure(DOMElement $expectedElement, DOMElement $actualElement, bool $checkAttributes = false, string $message = ''): void
+    public static function assertEqualXMLStructure(\DOMElement $expectedElement, \DOMElement $actualElement, bool $checkAttributes = false, string $message = ''): void
     {
+        self::createWarning('assertEqualXMLStructure() is deprecated and will be removed in PHPUnit 10.');
+
         $expectedElement = Xml::import($expectedElement);
         $actualElement   = Xml::import($actualElement);
 
@@ -2449,6 +2630,8 @@ abstract class Assert
      * Mark the test as incomplete.
      *
      * @throws IncompleteTestError
+     *
+     * @psalm-return never-return
      */
     public static function markTestIncomplete(string $message = ''): void
     {
@@ -2460,6 +2643,8 @@ abstract class Assert
      *
      * @throws SkippedTestError
      * @throws SyntheticSkippedError
+     *
+     * @psalm-return never-return
      */
     public static function markTestSkipped(string $message = ''): void
     {

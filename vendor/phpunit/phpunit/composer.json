@@ -33,14 +33,15 @@
         "phar-io/manifest": "^1.0.3",
         "phar-io/version": "^2.0.1",
         "phpspec/prophecy": "^1.8.1",
-        "phpunit/php-code-coverage": "^8.0",
+        "phpunit/php-code-coverage": "^8.0.1",
         "phpunit/php-file-iterator": "^3.0",
         "phpunit/php-invoker": "^3.0",
         "phpunit/php-text-template": "^2.0",
-        "phpunit/php-timer": "^3.0",
+        "phpunit/php-timer": "^3.1.4",
+        "sebastian/code-unit": "^1.0.2",
         "sebastian/comparator": "^4.0",
         "sebastian/diff": "^4.0",
-        "sebastian/environment": "^5.0",
+        "sebastian/environment": "^5.0.1",
         "sebastian/exporter": "^4.0",
         "sebastian/global-state": "^4.0",
         "sebastian/object-enumerator": "^4.0",
@@ -49,7 +50,8 @@
         "sebastian/version": "^3.0"
     },
     "require-dev": {
-        "ext-PDO": "*"
+        "ext-PDO": "*",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
     "config": {
         "platform": {
@@ -85,7 +87,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "9.0-dev"
+            "dev-master": "9.1-dev"
         }
     }
 }

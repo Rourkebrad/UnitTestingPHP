@@ -9,10 +9,6 @@
  */
 namespace PHPUnit\Framework;
 
-use ArrayAccess;
-use Countable;
-use DOMDocument;
-use DOMElement;
 use PHPUnit\Framework\Constraint\ArrayHasKey;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\Constraint\ClassHasAttribute;
@@ -67,13 +63,12 @@ use PHPUnit\Framework\MockObject\Stub\ReturnCallback as ReturnCallbackStub;
 use PHPUnit\Framework\MockObject\Stub\ReturnSelf as ReturnSelfStub;
 use PHPUnit\Framework\MockObject\Stub\ReturnStub;
 use PHPUnit\Framework\MockObject\Stub\ReturnValueMap as ReturnValueMapStub;
-use Throwable;
 
 /**
  * Asserts that an array has a specified key.
  *
- * @param int|string        $key
- * @param array|ArrayAccess $array
+ * @param int|string         $key
+ * @param array|\ArrayAccess $array
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -89,8 +84,8 @@ function assertArrayHasKey($key, $array, string $message = ''): void
 /**
  * Asserts that an array does not have a specified key.
  *
- * @param int|string        $key
- * @param array|ArrayAccess $array
+ * @param int|string         $key
+ * @param array|\ArrayAccess $array
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -183,7 +178,7 @@ function assertNotContainsOnly(string $type, iterable $haystack, ?bool $isNative
 /**
  * Asserts the number of elements of an array, Countable or Traversable.
  *
- * @param Countable|iterable $haystack
+ * @param \Countable|iterable $haystack
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -199,7 +194,7 @@ function assertCount(int $expectedCount, $haystack, string $message = ''): void
 /**
  * Asserts the number of elements of an array, Countable or Traversable.
  *
- * @param Countable|iterable $haystack
+ * @param \Countable|iterable $haystack
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -585,6 +580,22 @@ function assertIsReadable(string $filename, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertIsNotReadable
+ */
+function assertIsNotReadable(string $filename, string $message = ''): void
+{
+    Assert::assertIsNotReadable(...\func_get_args());
+}
+
+/**
+ * Asserts that a file/dir exists and is not readable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4062
  * @see Assert::assertNotIsReadable
  */
 function assertNotIsReadable(string $filename, string $message = ''): void
@@ -611,6 +622,22 @@ function assertIsWritable(string $filename, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertIsNotWritable
+ */
+function assertIsNotWritable(string $filename, string $message = ''): void
+{
+    Assert::assertIsNotWritable(...\func_get_args());
+}
+
+/**
+ * Asserts that a file/dir exists and is not writable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4065
  * @see Assert::assertNotIsWritable
  */
 function assertNotIsWritable(string $filename, string $message = ''): void
@@ -637,6 +664,22 @@ function assertDirectoryExists(string $directory, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertDirectoryDoesNotExist
+ */
+function assertDirectoryDoesNotExist(string $directory, string $message = ''): void
+{
+    Assert::assertDirectoryDoesNotExist(...\func_get_args());
+}
+
+/**
+ * Asserts that a directory does not exist.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4068
  * @see Assert::assertDirectoryNotExists
  */
 function assertDirectoryNotExists(string $directory, string $message = ''): void
@@ -663,6 +706,22 @@ function assertDirectoryIsReadable(string $directory, string $message = ''): voi
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertDirectoryIsNotReadable
+ */
+function assertDirectoryIsNotReadable(string $directory, string $message = ''): void
+{
+    Assert::assertDirectoryIsNotReadable(...\func_get_args());
+}
+
+/**
+ * Asserts that a directory exists and is not readable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4071
  * @see Assert::assertDirectoryNotIsReadable
  */
 function assertDirectoryNotIsReadable(string $directory, string $message = ''): void
@@ -689,6 +748,22 @@ function assertDirectoryIsWritable(string $directory, string $message = ''): voi
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertDirectoryIsNotWritable
+ */
+function assertDirectoryIsNotWritable(string $directory, string $message = ''): void
+{
+    Assert::assertDirectoryIsNotWritable(...\func_get_args());
+}
+
+/**
+ * Asserts that a directory exists and is not writable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4074
  * @see Assert::assertDirectoryNotIsWritable
  */
 function assertDirectoryNotIsWritable(string $directory, string $message = ''): void
@@ -715,6 +790,22 @@ function assertFileExists(string $filename, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertFileDoesNotExist
+ */
+function assertFileDoesNotExist(string $filename, string $message = ''): void
+{
+    Assert::assertFileDoesNotExist(...\func_get_args());
+}
+
+/**
+ * Asserts that a file does not exist.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4077
  * @see Assert::assertFileNotExists
  */
 function assertFileNotExists(string $filename, string $message = ''): void
@@ -741,6 +832,22 @@ function assertFileIsReadable(string $file, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertFileIsNotReadable
+ */
+function assertFileIsNotReadable(string $file, string $message = ''): void
+{
+    Assert::assertFileIsNotReadable(...\func_get_args());
+}
+
+/**
+ * Asserts that a file exists and is not readable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4080
  * @see Assert::assertFileNotIsReadable
  */
 function assertFileNotIsReadable(string $file, string $message = ''): void
@@ -767,6 +874,22 @@ function assertFileIsWritable(string $file, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertFileIsNotWritable
+ */
+function assertFileIsNotWritable(string $file, string $message = ''): void
+{
+    Assert::assertFileIsNotWritable(...\func_get_args());
+}
+
+/**
+ * Asserts that a file exists and is not writable.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4083
  * @see Assert::assertFileNotIsWritable
  */
 function assertFileNotIsWritable(string $file, string $message = ''): void
@@ -1397,6 +1520,22 @@ function assertIsNotIterable($actual, string $message = ''): void
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertMatchesRegularExpression
+ */
+function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+{
+    Assert::assertMatchesRegularExpression(...\func_get_args());
+}
+
+/**
+ * Asserts that a string matches a given regular expression.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4086
  * @see Assert::assertRegExp
  */
 function assertRegExp(string $pattern, string $string, string $message = ''): void
@@ -1410,6 +1549,22 @@ function assertRegExp(string $pattern, string $string, string $message = ''): vo
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @see Assert::assertDoesNotMatchRegularExpression
+ */
+function assertDoesNotMatchRegularExpression(string $pattern, string $string, string $message = ''): void
+{
+    Assert::assertDoesNotMatchRegularExpression(...\func_get_args());
+}
+
+/**
+ * Asserts that a string does not match a given regular expression.
+ *
+ * @throws ExpectationFailedException
+ * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+ *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4089
  * @see Assert::assertNotRegExp
  */
 function assertNotRegExp(string $pattern, string $string, string $message = ''): void
@@ -1421,8 +1576,8 @@ function assertNotRegExp(string $pattern, string $string, string $message = ''):
  * Assert that the size of two arrays (or `Countable` or `Traversable` objects)
  * is the same.
  *
- * @param Countable|iterable $expected
- * @param Countable|iterable $actual
+ * @param \Countable|iterable $expected
+ * @param \Countable|iterable $actual
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1439,8 +1594,8 @@ function assertSameSize($expected, $actual, string $message = ''): void
  * Assert that the size of two arrays (or `Countable` or `Traversable` objects)
  * is not the same.
  *
- * @param Countable|iterable $expected
- * @param Countable|iterable $actual
+ * @param \Countable|iterable $expected
+ * @param \Countable|iterable $actual
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1635,7 +1790,7 @@ function assertXmlFileNotEqualsXmlFile(string $expectedFile, string $actualFile,
 /**
  * Asserts that two XML documents are equal.
  *
- * @param DOMDocument|string $actualXml
+ * @param \DOMDocument|string $actualXml
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1651,7 +1806,7 @@ function assertXmlStringEqualsXmlFile(string $expectedFile, $actualXml, string $
 /**
  * Asserts that two XML documents are not equal.
  *
- * @param DOMDocument|string $actualXml
+ * @param \DOMDocument|string $actualXml
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1667,8 +1822,8 @@ function assertXmlStringNotEqualsXmlFile(string $expectedFile, $actualXml, strin
 /**
  * Asserts that two XML documents are equal.
  *
- * @param DOMDocument|string $expectedXml
- * @param DOMDocument|string $actualXml
+ * @param \DOMDocument|string $expectedXml
+ * @param \DOMDocument|string $actualXml
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1684,8 +1839,8 @@ function assertXmlStringEqualsXmlString($expectedXml, $actualXml, string $messag
 /**
  * Asserts that two XML documents are not equal.
  *
- * @param DOMDocument|string $expectedXml
- * @param DOMDocument|string $actualXml
+ * @param \DOMDocument|string $expectedXml
+ * @param \DOMDocument|string $actualXml
  *
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -1705,9 +1860,12 @@ function assertXmlStringNotEqualsXmlString($expectedXml, $actualXml, string $mes
  * @throws ExpectationFailedException
  * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
  *
+ * @codeCoverageIgnore
+ *
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4091
  * @see Assert::assertEqualXMLStructure
  */
-function assertEqualXMLStructure(DOMElement $expectedElement, DOMElement $actualElement, bool $checkAttributes = false, string $message = ''): void
+function assertEqualXMLStructure(\DOMElement $expectedElement, \DOMElement $actualElement, bool $checkAttributes = false, string $message = ''): void
 {
     Assert::assertEqualXMLStructure(...\func_get_args());
 }
@@ -2135,7 +2293,7 @@ function returnSelf(): ReturnSelfStub
     return new ReturnSelfStub;
 }
 
-function throwException(Throwable $exception): ExceptionStub
+function throwException(\Throwable $exception): ExceptionStub
 {
     return new ExceptionStub($exception);
 }

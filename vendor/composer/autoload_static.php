@@ -24,15 +24,29 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         'S' => 
         array (
             'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Component\\Yaml\\' => 23,
         ),
         'P' => 
         array (
             'Prophecy\\' => 9,
         ),
+        'N' => 
+        array (
+            'Noodlehaus\\' => 11,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
+        ),
+        'C' => 
+        array (
+            'Codedungeon\\PHPUnitPrettyResultPrinter\\' => 39,
+            'Codedungeon\\PHPCliColors\\' => 25,
+        ),
+        'B' => 
+        array (
+            'Bakyt\\' => 6,
         ),
     );
 
@@ -51,9 +65,17 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
+        'Symfony\\Component\\Yaml\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
+        'Noodlehaus\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/hassankhan/config/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -63,9 +85,27 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'Codedungeon\\PHPUnitPrettyResultPrinter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codedungeon/phpunit-result-printer/src',
+        ),
+        'Codedungeon\\PHPCliColors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codedungeon/php-cli-colors/src',
+        ),
+        'Bakyt\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/2bj/phanybar/src',
+        ),
     );
 
     public static $classMap = array (
+        'Collection' => __DIR__ . '/../..' . '/classes/Collection.php',
+        'Connection' => __DIR__ . '/../..' . '/classes/Connection.php',
+        'ListingBasic' => __DIR__ . '/../..' . '/classes/ListingBasic.php',
+        'ListingFeatured' => __DIR__ . '/../..' . '/classes/ListingFeatured.php',
+        'ListingInactive' => __DIR__ . '/../..' . '/classes/ListingInactive.php',
+        'ListingPremium' => __DIR__ . '/../..' . '/classes/ListingPremium.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert.php',
         'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Exception/AssertionFailedError.php',
@@ -242,6 +282,10 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         'PHPUnit\\Runner\\TestSuiteLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/TestSuiteLoader.php',
         'PHPUnit\\Runner\\TestSuiteSorter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/TestSuiteSorter.php',
         'PHPUnit\\Runner\\Version' => __DIR__ . '/..' . '/phpunit/phpunit/src/Runner/Version.php',
+        'PHPUnit\\TextUI\\Arguments\\Arguments' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Arguments/Arguments.php',
+        'PHPUnit\\TextUI\\Arguments\\ArgumentsBuilder' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Arguments/ArgumentsBuilder.php',
+        'PHPUnit\\TextUI\\Arguments\\ArgumentsMapper' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Arguments/ArgumentsMapper.php',
+        'PHPUnit\\TextUI\\Arguments\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Arguments/Exception.php',
         'PHPUnit\\TextUI\\Command' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Command.php',
         'PHPUnit\\TextUI\\Configuration\\Configuration' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/Configuration.php',
         'PHPUnit\\TextUI\\Configuration\\Constant' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/PHP/Constant.php',
@@ -254,6 +298,7 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         'PHPUnit\\TextUI\\Configuration\\Extension' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/PHPUnit/Extension.php',
         'PHPUnit\\TextUI\\Configuration\\ExtensionCollection' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/PHPUnit/ExtensionCollection.php',
         'PHPUnit\\TextUI\\Configuration\\ExtensionCollectionIterator' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/PHPUnit/ExtensionCollectionIterator.php',
+        'PHPUnit\\TextUI\\Configuration\\ExtensionHandler' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/PHPUnit/ExtensionHandler.php',
         'PHPUnit\\TextUI\\Configuration\\File' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/Filesystem/File.php',
         'PHPUnit\\TextUI\\Configuration\\FileCollection' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/Filesystem/FileCollection.php',
         'PHPUnit\\TextUI\\Configuration\\FileCollectionIterator' => __DIR__ . '/..' . '/phpunit/phpunit/src/TextUI/Configuration/Filesystem/FileCollectionIterator.php',
@@ -338,6 +383,7 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
+        'PHPUnit\\Util\\VersionComparisonOperator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/VersionComparisonOperator.php',
         'PHPUnit\\Util\\XdebugFilterScriptGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
         'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
@@ -625,6 +671,21 @@ class ComposerStaticInit786a2ac536502318334870d39e0a5f9d
         'SebastianBergmann\\CodeCoverage\\Util' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Util.php',
         'SebastianBergmann\\CodeCoverage\\Version' => __DIR__ . '/..' . '/phpunit/php-code-coverage/src/Version.php',
         'SebastianBergmann\\CodeUnitReverseLookup\\Wizard' => __DIR__ . '/..' . '/sebastian/code-unit-reverse-lookup/src/Wizard.php',
+        'SebastianBergmann\\CodeUnit\\ClassMethodUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/ClassMethodUnit.php',
+        'SebastianBergmann\\CodeUnit\\ClassUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/ClassUnit.php',
+        'SebastianBergmann\\CodeUnit\\CodeUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/CodeUnit.php',
+        'SebastianBergmann\\CodeUnit\\CodeUnitCollection' => __DIR__ . '/..' . '/sebastian/code-unit/src/CodeUnitCollection.php',
+        'SebastianBergmann\\CodeUnit\\CodeUnitCollectionIterator' => __DIR__ . '/..' . '/sebastian/code-unit/src/CodeUnitCollectionIterator.php',
+        'SebastianBergmann\\CodeUnit\\Exception' => __DIR__ . '/..' . '/sebastian/code-unit/src/exceptions/Exception.php',
+        'SebastianBergmann\\CodeUnit\\FunctionUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/FunctionUnit.php',
+        'SebastianBergmann\\CodeUnit\\InterfaceMethodUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/InterfaceMethodUnit.php',
+        'SebastianBergmann\\CodeUnit\\InterfaceUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/InterfaceUnit.php',
+        'SebastianBergmann\\CodeUnit\\InvalidCodeUnitException' => __DIR__ . '/..' . '/sebastian/code-unit/src/exceptions/InvalidCodeUnitException.php',
+        'SebastianBergmann\\CodeUnit\\Mapper' => __DIR__ . '/..' . '/sebastian/code-unit/src/Mapper.php',
+        'SebastianBergmann\\CodeUnit\\NoTraitException' => __DIR__ . '/..' . '/sebastian/code-unit/src/exceptions/NoTraitException.php',
+        'SebastianBergmann\\CodeUnit\\ReflectionException' => __DIR__ . '/..' . '/sebastian/code-unit/src/exceptions/ReflectionException.php',
+        'SebastianBergmann\\CodeUnit\\TraitMethodUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/TraitMethodUnit.php',
+        'SebastianBergmann\\CodeUnit\\TraitUnit' => __DIR__ . '/..' . '/sebastian/code-unit/src/TraitUnit.php',
         'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ArrayComparator.php',
         'SebastianBergmann\\Comparator\\Comparator' => __DIR__ . '/..' . '/sebastian/comparator/src/Comparator.php',
         'SebastianBergmann\\Comparator\\ComparisonFailure' => __DIR__ . '/..' . '/sebastian/comparator/src/ComparisonFailure.php',

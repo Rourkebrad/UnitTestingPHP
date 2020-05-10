@@ -32,6 +32,7 @@ use PHPUnit\Runner\TestSuiteLoader;
 use PHPUnit\Runner\TestSuiteSorter;
 use PHPUnit\Runner\Version;
 use PHPUnit\TextUI\Configuration\Configuration;
+use PHPUnit\TextUI\Configuration\ExtensionHandler;
 use PHPUnit\TextUI\Configuration\PhpHandler;
 use PHPUnit\TextUI\Configuration\Registry;
 use PHPUnit\Util\Filesystem;
@@ -118,7 +119,7 @@ final class TestRunner extends BaseTestRunner
      * @throws \PHPUnit\Runner\Exception
      * @throws Exception
      */
-    public function run(Test $suite, array $arguments = [], bool $exit = true): TestResult
+    public function run(Test $suite, array $arguments = [], array $warnings = [], bool $exit = true): TestResult
     {
         if (isset($arguments['configuration'])) {
             $GLOBALS['__PHPUNIT_CONFIGURATION_FILE'] = $arguments['configuration'];
@@ -337,6 +338,10 @@ final class TestRunner extends BaseTestRunner
             }
         }
 
+        foreach ($warnings as $warning) {
+            $this->writeMessage('Warning', $warning);
+        }
+
         if ($arguments['executionOrder'] === TestSuiteSorter::ORDER_RANDOMIZED) {
             $this->writeMessage(
                 'Random seed',
@@ -546,7 +551,7 @@ final class TestRunner extends BaseTestRunner
                 );
             }
 
-            if (isset($arguments['disableCodeCoverageIgnore'])) {
+            if (isset($arguments['disableCodeCoverageIgnore']) && $arguments['disableCodeCoverageIgnore'] === true) {
                 $codeCoverage->setDisableIgnoredLines(true);
             }
 
@@ -631,6 +636,18 @@ final class TestRunner extends BaseTestRunner
             if ($extension instanceof BeforeFirstTestHook) {
                 $extension->executeBeforeFirstTest();
             }
+        }
+
+        $testSuiteWarningsPrinted = false;
+
+        foreach ($suite->warnings() as $warning) {
+            $this->writeMessage('Warning', $warning);
+
+            $testSuiteWarningsPrinted = true;
+        }
+
+        if ($testSuiteWarningsPrinted) {
+            $this->write(\PHP_EOL);
         }
 
         $suite->run($result);
@@ -760,6 +777,14 @@ final class TestRunner extends BaseTestRunner
                     exit(self::FAILURE_EXIT);
                 }
 
+                if ($arguments['failOnIncomplete'] && $result->notImplementedCount() > 0) {
+                    exit(self::FAILURE_EXIT);
+                }
+
+                if ($arguments['failOnSkipped'] && $result->skippedCount() > 0) {
+                    exit(self::FAILURE_EXIT);
+                }
+
                 exit(self::SUCCESS_EXIT);
             }
 
@@ -858,8 +883,10 @@ final class TestRunner extends BaseTestRunner
             $arguments['stopOnIncomplete']                                = $arguments['stopOnIncomplete'] ?? $phpunitConfiguration->stopOnIncomplete();
             $arguments['stopOnRisky']                                     = $arguments['stopOnRisky'] ?? $phpunitConfiguration->stopOnRisky();
             $arguments['stopOnSkipped']                                   = $arguments['stopOnSkipped'] ?? $phpunitConfiguration->stopOnSkipped();
-            $arguments['failOnWarning']                                   = $arguments['failOnWarning'] ?? $phpunitConfiguration->failOnWarning();
+            $arguments['failOnIncomplete']                                = $arguments['failOnIncomplete'] ?? $phpunitConfiguration->failOnIncomplete();
             $arguments['failOnRisky']                                     = $arguments['failOnRisky'] ?? $phpunitConfiguration->failOnRisky();
+            $arguments['failOnSkipped']                                   = $arguments['failOnSkipped'] ?? $phpunitConfiguration->failOnSkipped();
+            $arguments['failOnWarning']                                   = $arguments['failOnWarning'] ?? $phpunitConfiguration->failOnWarning();
             $arguments['enforceTimeLimit']                                = $arguments['enforceTimeLimit'] ?? $phpunitConfiguration->enforceTimeLimit();
             $arguments['defaultTimeLimit']                                = $arguments['defaultTimeLimit'] ?? $phpunitConfiguration->defaultTimeLimit();
             $arguments['timeoutForSmallTests']                            = $arguments['timeoutForSmallTests'] ?? $phpunitConfiguration->timeoutForSmallTests();
@@ -912,12 +939,23 @@ final class TestRunner extends BaseTestRunner
                 $arguments['excludeGroups'] = \array_diff($groupConfiguration->exclude()->asArrayOfStrings(), $groupCliArgs);
             }
 
+            $extensionHandler = new ExtensionHandler;
+
             foreach ($arguments['configuration']->extensions() as $extension) {
-                $this->addExtension($extension->createHookInstance());
+                $this->addExtension($extensionHandler->createHookInstance($extension));
             }
 
             foreach ($arguments['configuration']->listeners() as $listener) {
-                $arguments['listeners'][] = $listener->createTestListenerInstance();
+                $arguments['listeners'][] = $extensionHandler->createTestListenerInstance($listener);
+            }
+
+            unset($extensionHandler);
+
+            foreach ($arguments['unavailableExtensions'] as $extension) {
+                $arguments['warnings'][] = \sprintf(
+                    'Extension "%s" is not available',
+                    $extension
+                );
             }
 
             $loggingConfiguration = $arguments['configuration']->logging();
@@ -998,6 +1036,14 @@ final class TestRunner extends BaseTestRunner
             }
         }
 
+        $extensionHandler = new ExtensionHandler;
+
+        foreach ($arguments['extensions'] as $extension) {
+            $this->addExtension($extensionHandler->createHookInstance($extension));
+        }
+
+        unset($extensionHandler);
+
         $arguments['addUncoveredFilesFromWhitelist']                  = $arguments['addUncoveredFilesFromWhitelist'] ?? true;
         $arguments['backupGlobals']                                   = $arguments['backupGlobals'] ?? null;
         $arguments['backupStaticAttributes']                          = $arguments['backupStaticAttributes'] ?? null;
@@ -1019,7 +1065,9 @@ final class TestRunner extends BaseTestRunner
         $arguments['excludeGroups']                                   = $arguments['excludeGroups'] ?? [];
         $arguments['executionOrder']                                  = $arguments['executionOrder'] ?? TestSuiteSorter::ORDER_DEFAULT;
         $arguments['executionOrderDefects']                           = $arguments['executionOrderDefects'] ?? TestSuiteSorter::ORDER_DEFAULT;
+        $arguments['failOnIncomplete']                                = $arguments['failOnIncomplete'] ?? false;
         $arguments['failOnRisky']                                     = $arguments['failOnRisky'] ?? false;
+        $arguments['failOnSkipped']                                   = $arguments['failOnSkipped'] ?? false;
         $arguments['failOnWarning']                                   = $arguments['failOnWarning'] ?? false;
         $arguments['groups']                                          = $arguments['groups'] ?? [];
         $arguments['noInteraction']                                   = $arguments['noInteraction'] ?? false;
@@ -1133,7 +1181,7 @@ final class TestRunner extends BaseTestRunner
         $this->printer->write(
             \sprintf(
                 "done [%s]\n",
-                Timer::secondsToTimeString(Timer::stop())
+                Timer::secondsToShortTimeString(Timer::stop())
             )
         );
     }
@@ -1143,7 +1191,7 @@ final class TestRunner extends BaseTestRunner
         $this->printer->write(
             \sprintf(
                 "failed [%s]\n%s\n",
-                Timer::secondsToTimeString(Timer::stop()),
+                Timer::secondsToShortTimeString(Timer::stop()),
                 $e->getMessage()
             )
         );

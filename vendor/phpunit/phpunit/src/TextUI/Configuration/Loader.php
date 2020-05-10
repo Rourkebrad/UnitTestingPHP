@@ -26,6 +26,7 @@ use PHPUnit\TextUI\Configuration\Logging\TestDox\Xml as TestDoxXml;
 use PHPUnit\TextUI\Configuration\TestSuite as TestSuiteConfiguration;
 use PHPUnit\TextUI\DefaultResultPrinter;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
+use PHPUnit\Util\VersionComparisonOperator;
 use PHPUnit\Util\Xml;
 
 /**
@@ -704,8 +705,10 @@ final class Loader
             $this->getBooleanAttribute($document->documentElement, 'disableCodeCoverageIgnore', false),
             $bootstrap,
             $this->getBooleanAttribute($document->documentElement, 'processIsolation', false),
-            $this->getBooleanAttribute($document->documentElement, 'failOnWarning', false),
+            $this->getBooleanAttribute($document->documentElement, 'failOnIncomplete', false),
             $this->getBooleanAttribute($document->documentElement, 'failOnRisky', false),
+            $this->getBooleanAttribute($document->documentElement, 'failOnSkipped', false),
+            $this->getBooleanAttribute($document->documentElement, 'failOnWarning', false),
             $this->getBooleanAttribute($document->documentElement, 'stopOnDefect', false),
             $this->getBooleanAttribute($document->documentElement, 'stopOnError', false),
             $this->getBooleanAttribute($document->documentElement, 'stopOnFailure', false),
@@ -819,10 +822,10 @@ final class Loader
                     $phpVersion = (string) $directoryNode->getAttribute('phpVersion');
                 }
 
-                $phpVersionOperator = '>=';
+                $phpVersionOperator = new VersionComparisonOperator('>=');
 
                 if ($directoryNode->hasAttribute('phpVersionOperator')) {
-                    $phpVersionOperator = (string) $directoryNode->getAttribute('phpVersionOperator');
+                    $phpVersionOperator = new VersionComparisonOperator((string) $directoryNode->getAttribute('phpVersionOperator'));
                 }
 
                 $directories[] = new TestDirectory(
@@ -851,10 +854,10 @@ final class Loader
                     $phpVersion = (string) $fileNode->getAttribute('phpVersion');
                 }
 
-                $phpVersionOperator = '>=';
+                $phpVersionOperator = new VersionComparisonOperator('>=');
 
                 if ($fileNode->hasAttribute('phpVersionOperator')) {
-                    $phpVersionOperator = (string) $fileNode->getAttribute('phpVersionOperator');
+                    $phpVersionOperator = new VersionComparisonOperator((string) $fileNode->getAttribute('phpVersionOperator'));
                 }
 
                 $files[] = new TestFile(
