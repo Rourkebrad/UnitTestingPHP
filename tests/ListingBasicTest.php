@@ -8,23 +8,28 @@ class ListingBasicTest extends TestCase
   function exceptionMessage1() //Exception 1 Test - test for empty data
   {
     $this->expectException(Exception::class);
-    $listing = new ListingBasic();
+
+    $data = [];
+
+    $listing = new ListingBasic($data);
   }
 
   /** @test */
   function exceptionMessage2() //Exception 2 - test for invalid ID
   {
     $this->expectException(Exception::class);
-    $idTest = ["id"=>null];
-    $listing = new ListingBasic($idTest);
+    $data = ["id"=>null, "title" => "test"];
+    $listing = new ListingBasic($data);
+    $listing->setValues($data = ["id" => null,"title" => "test"]);
   }
 
   /** @test */
   function exceptionMessage3() //Exception 3 - test for invalid title
   {
     $this->expectException(Exception::class);
-    $titleTest = ["title"=>null];
-    $listing = new ListingBasic($titleTest);
+    $data = ["id" => 1,"title"=>null];
+    $listing = new ListingBasic($data);
+    $listing->setValues($data = ["id"=> 1, "title" => null]);
   }
 
   /** @test */
@@ -51,15 +56,16 @@ class ListingBasicTest extends TestCase
       "title" => "test Title",
       "website" => "http://www.test.com",
       "email" => "testemail@gmail.com",
-      "twitter" => "TestTwitter"
+      "twitter" => "TestTwitter",
+
     ];
 
     $listing = new ListingBasic($data);
-    $this->assertEquals(1, $listing->getId());
-    $this->assertEquals("test Title", $listing->getTitle());
-    $this->assertEquals("http://www.test.com", $listing->getWebsite());
-    $this->assertEquals("testemail@gmail.com", $listing->getEmail());
-    $this->assertEquals("TestTwitter", $listing->getTwitter());
+    $this->assertEquals($data['id'], $listing->getId());
+    $this->assertEquals($data['title'], $listing->getTitle());
+    $this->assertEquals($data['website'], $listing->getWebsite());
+    $this->assertEquals($data['email'], $listing->getEmail());
+    $this->assertEquals($data['twitter'], $listing->getTwitter());
   }
 
   /** @test */
@@ -80,10 +86,57 @@ class ListingBasicTest extends TestCase
       "title" => "test Title",
       "website" => "http://www.test.com",
       "email" => "testemail@gmail.com",
-      "twitter" => "TestTwitter"
+      "twitter" => "TestTwitter",
+      "status" => "basic"
     ], $listing->toArray());
 
   }
+
+  /** @test */
+   function websiteNotSetCheck()
+   {
+       $data = [
+           'id' => 2,
+           'title' => 'test no site',
+           'website' => ''
+       ];
+
+       $listing = new ListingBasic($data);
+       $this->assertNull($listing->getWebsite());
+   }
+
+   /** @test */
+   function websiteSiteCheck()
+   {
+        $data = [
+            'id' => 3,
+            'title' => 'test',
+            'website' => 'test.com'
+        ];
+
+        $listing = new ListingBasic($data);
+        $this->assertStringMatchesFormat(
+            $listing->getWebsite(),
+            'http://' . $data['website']
+        );
+    }
+
+    /** @test */
+    function isStatusEmpty()
+    {
+        $data = [
+            'id' => 9,
+            'title' => 'test',
+            'status' => ''
+        ];
+
+        $listing = new ListingBasic($data);
+        $this->assertEquals("basic",$listing->getStatus());
+    }
+
+
+
+
 }
 
 
