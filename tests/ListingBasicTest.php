@@ -56,7 +56,7 @@ class ListingBasicTest extends TestCase
       "title" => "test Title",
       "website" => "http://www.test.com",
       "email" => "testemail@gmail.com",
-      "twitter" => "TestTwitter",
+      "twitter" => "TestTwitter"
 
     ];
 
@@ -133,9 +133,6 @@ class ListingBasicTest extends TestCase
         $listing = new ListingBasic($data);
         $this->assertEquals("basic",$listing->getStatus());
     }
-
-
-
 
 }
 

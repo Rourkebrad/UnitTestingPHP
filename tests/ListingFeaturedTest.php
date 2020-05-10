@@ -11,7 +11,11 @@ class ListingFeaturedTest extends TestCase
     $data = [
       "id" => 1,
       "title" => "test Title",
-      "status" => "featured"
+      "status" => "featured",
+      "website" => "test.com",
+      "email" => "testemail@gmail.com",
+      "twitter" => "TestTwitter",
+      "description" => "test description"
     ];
 
     $listing = new ListingFeatured($data);
@@ -24,7 +28,12 @@ class ListingFeaturedTest extends TestCase
     $data = [
       "id" => 1,
       "title" => "test Title",
-      "coc" => "test"
+      "coc" => "test",
+      "status" => "featured",
+      "website" => "test.com",
+      "email" => "testemail@gmail.com",
+      "twitter" => "TestTwitter",
+      "description" => "test description"
     ];
 
     $listing = new ListingFeatured($data);

@@ -10,7 +10,11 @@ class ListingPremiumTest extends TestCase
     $data = [
       "id" => 1,
       "title" => "test Title",
-      "status" => "premium"
+      "status" => "premium",
+      "website" => "test.com",
+      "email" => "testemail@gmail.com",
+      "twitter" => "TestTwitter",
+      "description" => "test description"
     ];
 
     $listing = new ListingPremium($data);
@@ -23,7 +27,12 @@ class ListingPremiumTest extends TestCase
     $data = [
       "id" => 1,
       "title" => "test Title",
-      "description" => "test Description"
+      "description" => "test Description",
+      "status" => "premium",
+      "website" => "test.com",
+      "email" => "testemail@gmail.com",
+      "twitter" => "TestTwitter",
+      "description" => "test description"
     ];
 
     $listing = new ListingPremium($data);
@@ -31,7 +40,15 @@ class ListingPremiumTest extends TestCase
   }
 
 
+      /** @test */
+     function tagsAllowed()
+     {
+         $this->assertStringMatchesFormat(
+            htmlspecialchars('<p><br><b><strong><em><u><ol><ul><li>'),
+             ListingPremium::displayAllowedTags()
+            );
 
+     }
 
 
 
