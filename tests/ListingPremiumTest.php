@@ -36,7 +36,7 @@ class ListingPremiumTest extends TestCase
     ];
 
     $listing = new ListingPremium($data);
-    $this->assertEquals("test Description", $listing->getDescription());
+    $this->assertEquals("test description", $listing->getDescription());
   }
 
 

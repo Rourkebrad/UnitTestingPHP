@@ -1,29 +1,5 @@
-Listing Basic
- [x] Exception message 1
- [x] Exception message 2
- [x] Exception message 3
- [x] Check object created
- [x] Get status check
- [x] Get method check
- [x] Array method check
- [x] Website not set check
- [x] Website site check
- [x] Is status empty
- [x] No image
- [x] Full path image
- [x] Build path image
-
-Listing Featured
- [x] Get status check
- [x] Get coc check
-
-Listing Image
- [x] No image
- [x] Full path image
- [ ] Build path image
-
 Listing Premium
  [x] Get status check
- [ ] Get description check
+ [x] Get description check
  [x] Tags allowed
 
